@@ -1,0 +1,132 @@
+####################################################################################################################
+####################################################################################################################
+
+#Defining the units
+#------------------real, así que hay que cambiar las Constantes luego
+units	real
+
+#Defining atom stle and boundary conditions
+#------------------------------------------
+atom_style		atomic
+boundary		p p p
+newton          on
+atom_modify     sort 0 0.0
+#read-data
+#----------------------------
+# Leer la celda unidad
+read_data       data.unit
+replicate       20 2 2
+
+# 1. Definir la longitud total del eje X (variable lx_total)
+variable lx_total equal xhi-xlo
+
+# 2. Definir el punto medio de la caja
+variable x_mid equal v_lx_total/2.0
+
+# 3. Definir las regiones usando el punto medio
+# Creamos un gap de 0.001 unidades (o un valor definido por otra variable)
+
+variable gap_half equal 0.0005 # 0.001 / 2
+
+# **CORRECCIÓN para el error 'Expected floating point parameter'**
+# Debemos pre-calcular los límites de las regiones con variables 'equal'
+# NOTA: Usamos 'v_' para referenciar otras variables dentro de una variable 'equal'
+variable x_limit_left equal v_x_mid-v_gap_half
+variable x_limit_right equal v_x_mid+v_gap_half
+
+# Al usar variables en comandos (como 'region'), la sustitución '${}' es OBLIGATORIA.
+region left block EDGE ${x_limit_left} EDGE EDGE EDGE EDGE units box
+region right block ${x_limit_right} EDGE EDGE EDGE EDGE EDGE units box
+
+# NOTA: Asegúrese de que la unidad del gap sea la misma que la unidad box.
+#region left block EDGE   135.775 EDGE EDGE EDGE EDGE units box
+#region right block   135.776 EDGE EDGE EDGE EDGE EDGE units box
+
+# Defining groups
+#----------------
+group lr region left
+group rr region right
+
+#----------------------
+# mass	1  28.06
+
+#Defining interaction potential
+#------------------------------
+#pair_style     sw
+#pair_coeff * * Si.sw Si
+# Potencial ChIMES
+pair_style      chimesFF
+pair_coeff      * * params.txt
+
+# Defining simulation parameters
+#-------------------------------
+#
+variable    dt equal 1e-3
+timestep    ${dt}
+
+#option to relax the system previous go the main calculations
+#fix 1 all box/relax iso 0.0 vmax 0.001
+#minimize 1.0e-4 1.0e-6 100 1000
+##minimize 0.0 1.0e-8 1000 100000
+#unfix 1
+
+# Defining the output format
+#----------------
+# compute tl lr temp
+# compute tr rr temp
+# variable diff equal (c_tl-c_tr)
+# thermo_style custom step c_tl c_tr v_diff
+
+# -------------------------------consejos-----
+# Al principio NO definas thermo_style ni thermo frecuente
+# O pon un thermo muy espaciado solo para ver que no explota
+thermo          1000
+thermo_style    one    # o custom mínimo: step temp pe ke etotal
+
+# ... todo el proceso de termalización como lo tienes ...
+
+# Justo antes del NVE final (producción):
+# unfix           RUN3
+# thermo          100           # o 50, 200, según quieras
+# thermo_style    custom step c_tl c_tr v_diff press vol etotal ke
+# Opcional: thermo_modify norm yes   (si prefieres valores por átomo)
+# fix             RUN_prod all nve
+# run             300000        # o lo que necesites para producción
+#------------------------------------fin-consejos-----
+
+# PART ONE: thermalization by velocity rescaling
+#-----------------------------------------------
+velocity lr create 400.0 3452 dist gaussian
+fix    VR1   lr temp/rescale 1 400.0 400.0 1.0 1.0
+fix FR2 rr setforce  0.0 0.0 0.0
+fix    RUN1 lr nve
+thermo 100
+run    10000
+unfix  VR1
+unfix  FR2
+unfix  RUN1
+################################
+velocity rr create 200.0 7654 dist gaussian
+fix    VR2   rr temp/rescale 1 200.0 200.0 1.0 1.0
+fix    FR1   lr setforce  0.0 0.0 0.0
+fix    RUN2 rr nve
+thermo 100
+run    10000
+unfix  VR2
+unfix  FR1
+unfix  RUN2
+###########################
+#-----------------------------------
+
+fix    RUN3 all nve
+thermo 100
+compute tl lr temp
+compute tr rr temp
+variable diff equal (c_tl-c_tr)
+thermo_style custom step c_tl c_tr v_diff
+
+# tal vez hacer el run más largo si el sistema es muy complejo
+run    30000
+unfix  RUN3
+#
+# END
