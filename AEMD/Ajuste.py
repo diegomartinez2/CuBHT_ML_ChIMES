@@ -230,12 +230,12 @@ def f_total(x, k2):
 # 3. CARGA DE DATOS Y AJUSTE (FIT)
 # ==========================================
 parametros = extraer_parametros_lammps(file_path="log.lammps")
-
-N_PARTICLES =        parametros['num_atomos']
-L =        parametros['longitud_x']
-VOL =        parametros['volumen_ang3']
-T_MAX =        parametros['t_caliente']
-T_MIN =        parametros['t_fria']
+if isinstance(parametros, dict):
+    N_PARTICLES =        parametros['num_atomos']
+    L =        parametros['longitud_x']
+    VOL =        parametros['volumen_ang3']
+    T_MAX =        parametros['t_caliente']
+    T_MIN =        parametros['t_fria']
 
 # Nota: Reemplaza 'out1' por la ruta de tu archivo.
 # Si no existe, el script generará datos sintéticos para demostración.
