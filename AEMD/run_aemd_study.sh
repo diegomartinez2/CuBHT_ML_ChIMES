@@ -21,7 +21,7 @@ REPLICAS=3
 
 # Archivo de entrada base y ejecutables
 INPUT_BASE="Thermo_AEMD_CuBHT_working.in"
-LAMMPS_EXEC="lmp_serial" # O mpirun -np 4 lmp_mpi, etc.
+LAMMPS_EXEC="mpirun -np 4 lmp_mpi" # O lmp_serial, etc.
 
 # 2. BUCLES DE EJECUCIÓN
 # -----------------------------------------------------------------------------
