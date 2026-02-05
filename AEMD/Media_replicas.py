@@ -25,7 +25,8 @@ def process_results():
                 # LAMMPS ave/time tiene 2 líneas de comentario iniciales
                 # El formato suele ser: TimeStep Number-of-bins v_delta_T
                 try:
-                    df = pd.read_csv(file_path, sep='\s+', skiprows=2, names=['Step', 'Count', 'DeltaT'])
+                    #df = pd.read_csv(file_path, sep='\s+', skiprows=2, names=['Step', 'Count', 'DeltaT'])
+                    df = pd.read_csv(file_path, sep='\s+', skiprows=2, names=['Step', 'DeltaT'])
                     all_data.append(df.set_index('Step')['DeltaT'])
                 except Exception as e:
                     print(f"Error leyendo {file_path}: {e}")
