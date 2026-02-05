@@ -20,7 +20,7 @@ def process_results():
             continue
 
         for rep_dir in replica_dirs:
-            file_path = os.path.join(rep_dir, "delta_T_raw.dat")
+            file_path = os.path.join(rep_dir, "delta_T_AEMD.dat")
             if os.path.exists(file_path):
                 # LAMMPS ave/time tiene 2 líneas de comentario iniciales
                 # El formato suele ser: TimeStep Number-of-bins v_delta_T
