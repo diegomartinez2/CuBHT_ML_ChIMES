@@ -58,18 +58,19 @@ for SIZE in "${SIZES[@]}"; do
                 SEED1=$((RANDOM + R * 100))
                 SEED2=$((RANDOM + R * 200))
                 SEED3=$((RANDOM + R * 300))
-
+                # Como STEP puede ser 0.5, usamos 'bc' para multiplicar
+                # Luego quitamos decimales sobrantes con 'cut' para el Tdamp de NVT
+                NUEVO_VALOR=$(echo "$STEP * 100" | bc -l | cut -d'.' -f1)
                 # Crear el archivo de entrada modificado para esta ejecución
                 # Usamos sed para reemplazar las líneas específicas del script original
-                NUEVO_VALOR=$((TS * 100))
                 sed -e "s/^replicate.*/replicate $SIZE/" \
                     -e "s/^variable dt equal.*/variable dt equal $TS/" \
                     -e "s/^fix NVT_eq all nvt temp \${T_eq} \${T_eq}.*/fix NVT_eq all nvt temp \${T_eq} \${T_eq} $NUEVO_VALOR/" \
                     -e "s/^variable T_hot_pulse equal.*/variable T_hot_pulse equal $T_HOT/" \
                     -e "s/^variable T_cold_pulse equal.*/variable T_cold_pulse equal $T_COLD/" \
-                    -e "s/velocity all create \${T_eq} [0-9]*/velocity all create \${T_eq} $S1/" \
-                    -e "s/velocity hot create \${T_hot_pulse} [0-9]*/velocity hot create \${T_hot_pulse} $S2/" \
-                    -e "s/velocity cold create \${T_cold_pulse} [0-9]*/velocity cold create \${T_cold_pulse} $S3/" \
+                    -e "s/velocity all create \${T_eq} [0-9]*/velocity all create \${T_eq} $SEED1/" \
+                    -e "s/velocity hot create \${T_hot_pulse} [0-9]*/velocity hot create \${T_hot_pulse} $SEED2/" \
+                    -e "s/velocity cold create \${T_cold_pulse} [0-9]*/velocity cold create \${T_cold_pulse} $SEED3/" \
                     -e "s/fix output all ave\/time \(.*\) file .*/fix output all ave\/time \1 file $OUTPUT_DAT/" \
                     "$INPUT_BASE" > "$WORK_DIR/input.in"
 
