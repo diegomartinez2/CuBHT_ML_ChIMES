@@ -71,7 +71,7 @@ for SIZE in "${SIZES[@]}"; do
                     -e "s/velocity hot create \${T_hot_pulse} [0-9]*/velocity hot create \${T_hot_pulse} $S2/" \
                     -e "s/velocity cold create \${T_cold_pulse} [0-9]*/velocity cold create \${T_cold_pulse} $S3/" \
                     -e "s/fix output all ave\/time \(.*\) file .*/fix output all ave\/time \1 file $OUTPUT_DAT/" \
-                    "$INPUT_BASE" > "$CASE_DIR/input.in"
+                    "$INPUT_BASE" > "$WORK_DIR/input.in"
 
                 # Copiar archivos necesarios (potenciales, datos, etc.)
                 cp params.txt AA-supercell-optimized.lmp "$WORK_DIR/"
