@@ -56,7 +56,9 @@ for SIZE in "${SIZES[@]}"; do
                 # 1. Cambiamos replicate, dt y temperaturas
                 # 2. Cambiamos las semillas de velocity
                 # 3. IMPORTANTE: Cambiamos el nombre del archivo de salida en 'fix ave/time'
-                NUEVO_VALOR=$((TS * 100))
+                NUEVO_VALOR=$(awk -v s="$STEP" 'BEGIN { printf "%d", s * 100 }')
+                # Crear el archivo de entrada modificado para esta ejecución
+                # Usamos sed para reemplazar las líneas específicas del script original
                 sed -e "s/^replicate.*/replicate $SIZE/" \
                     -e "s/^variable dt equal.*/variable dt equal $TS/" \
                     -e "s/^fix NVT_eq all nvt temp \${T_eq} \${T_eq}.*/fix NVT_eq all nvt temp \${T_eq} \${T_eq} $NUEVO_VALOR/" \
