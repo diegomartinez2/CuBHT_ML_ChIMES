@@ -10,6 +10,8 @@ In the ALAMODE directory there are the scripts and steps for using ALAMODE to ca
 
  The schemen for the ALAMODE calculations are to follow the 0... 10 steps indicated by the bash script files:
 
+* In extras there are parallel alternatives to the 4_LAMMPS_calculations.bash and a script to create the alm and anphon input files automatically (but need checking and small modificatios)
+
  Explanation (in spanish):
 
  # Cómo se hace...
@@ -87,4 +89,3 @@ In the ALAMODE directory there are the scripts and steps for using ALAMODE to ca
  gnuplot> plot "si222_300K_10.kl_spec" using 2:3 w l lt 2 lw 2
 
 
-* In extras there are parallel alternatives to the 4_LAMMPS_calculations.bash and a script to create the alm and anphon input files automatically (but need checking and small modificatios)
