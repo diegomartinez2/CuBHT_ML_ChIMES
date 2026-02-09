@@ -56,8 +56,10 @@ for SIZE in "${SIZES[@]}"; do
                 # 1. Cambiamos replicate, dt y temperaturas
                 # 2. Cambiamos las semillas de velocity
                 # 3. IMPORTANTE: Cambiamos el nombre del archivo de salida en 'fix ave/time'
+                NUEVO_VALOR=$((TS * 100))
                 sed -e "s/^replicate.*/replicate $SIZE/" \
                     -e "s/^variable dt equal.*/variable dt equal $TS/" \
+                    -e "s/^fix NVT_eq all nvt temp \${T_eq} \${T_eq}.*/fix NVT_eq all nvt temp \${T_eq} \${T_eq} $NUEVO_VALOR/" \
                     -e "s/^variable T_hot_pulse equal.*/variable T_hot_pulse equal $T_HOT/" \
                     -e "s/^variable T_cold_pulse equal.*/variable T_cold_pulse equal $T_COLD/" \
                     -e "s/velocity all create \${T_eq} [0-9]*/velocity all create \${T_eq} $S1/" \
