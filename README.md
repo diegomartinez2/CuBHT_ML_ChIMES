@@ -2,7 +2,9 @@
 Study of CuBHT with Machine Learning potentials
 
 ## Study CuBHT termal transport using chimesFF and AEMD
-In the CuBHT directory thera are the lammps datafiles of the structure configuratios
+In the DATA_ChIMES_parameters there are the parametrizations for CuBHT chimesFF. 
+
+In the CuBHT directory there are the lammps datafiles of the structure configuratios
 
 In the AEMD directory there are scripts for running the AEMD calculations.
 
@@ -87,5 +89,3 @@ In the ALAMODE directory there are the scripts and steps for using ALAMODE to ca
  gnuplot> set xlabel "Frequency (cm^{-1})"
  gnuplot> set ylabel "Spectrum of kappa (W/mK/cm^{-1})"
  gnuplot> plot "si222_300K_10.kl_spec" using 2:3 w l lt 2 lw 2
-
-
