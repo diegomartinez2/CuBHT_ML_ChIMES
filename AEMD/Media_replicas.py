@@ -27,7 +27,7 @@ def process_results():
                 try:
                     #df = pd.read_csv(file_path, sep='\s+', skiprows=2, names=['Step', 'Count', 'DeltaT'])
                     df = pd.read_csv(file_path, sep='\s+', skiprows=2, names=['Step', 'DeltaT'])
-                    all_data.append(df.set_index('Step')['DeltaT'])
+                    all_data.append(df.set_index('Step')['DeltaT']) # TimeStep v_delta_T
                 except Exception as e:
                     print(f"Error leyendo {file_path}: {e}")
 
