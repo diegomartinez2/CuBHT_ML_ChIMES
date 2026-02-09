@@ -60,7 +60,8 @@ for SIZE in "${SIZES[@]}"; do
                 SEED3=$((RANDOM + R * 300))
                 # Como STEP puede ser 0.5, usamos 'bc' para multiplicar
                 # Luego quitamos decimales sobrantes con 'cut' para el Tdamp de NVT
-                NUEVO_VALOR=$(echo "$STEP * 100" | bc -l | cut -d'.' -f1)
+                #NUEVO_VALOR=$(echo "$STEP * 100" | bc -l | cut -d'.' -f1)
+                NUEVO_VALOR=$(awk -v s="$STEP" 'BEGIN { printf "%d", s * 100 }')
                 # Crear el archivo de entrada modificado para esta ejecución
                 # Usamos sed para reemplazar las líneas específicas del script original
                 sed -e "s/^replicate.*/replicate $SIZE/" \
