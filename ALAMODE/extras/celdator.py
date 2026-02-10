@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 import numpy as np
 import os
-
+"""
+This calculates the parameters for the calculations from the datafiles.
+"""
 # Constante de conversión de Angstroms a Bohr
 # 1 Angstrom = 1.8897259886 Bohr
 ANGSTROM_TO_BOHR = 1.8897259886
