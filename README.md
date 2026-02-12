@@ -16,7 +16,7 @@ In the ALAMODE directory there are the scripts and steps for using ALAMODE to ca
 
  Explanation (in spanish):
 
- # Cómo se hace...
+ # Cómo se hacen los cálculos con ALAMODE:
  1. primero relajamos el sistema... esto nos dará 'relax.dat' esto es si antes no estaba relajado
  ./lmp_mpi_chimes -in lammps_relax.in  
  2. cambiamos la estructura en alm_suggest.in con los datos de la estructura relajada "relax.dat"
