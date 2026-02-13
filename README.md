@@ -16,7 +16,7 @@ In the ALAMODE directory there are the scripts and steps for using ALAMODE to ca
 
  Explanation (in spanish):
 
- # Cómo se hacen los cálculos con ALAMODE:
+ ## Cómo se hacen los cálculos con ALAMODE:
  1. primero relajamos el sistema... esto nos dará 'relax.dat' esto es si antes no estaba relajado
  ./lmp_mpi_chimes -in lammps_relax.in  
  2. cambiamos la estructura en alm_suggest.in con los datos de la estructura relajada "relax.dat"
@@ -38,7 +38,7 @@ In the ALAMODE directory there are the scripts and steps for using ALAMODE to ca
  anphon my_alamode_run_phband.in
  9. Dibujamos:
  plotband.py my_alamode_run.bands
- ### conductividad terminca
+ #### conductividad terminca
  1. calculamos a partir de lo anterior
  anphon si_RTA.in
  2. Dibujamos
@@ -56,7 +56,7 @@ In the ALAMODE directory there are the scripts and steps for using ALAMODE to ca
  gnuplot> set ylabel "Lattice thermal conductivity (W/mK)"
  gnuplot> plot "si222.kl" usi 1:2 w lp, "si222_boundary_1mm.kl" usi 1:2 w lp
 
- ### Phonon lifetime
+ #### Phonon lifetime
  1. Analisis del resultado anterior
  analyze_phonons.py --calc tau --temp 300 si222.result > tau300K_10.dat
  2. Dibujamos:
@@ -67,7 +67,7 @@ In the ALAMODE directory there are the scripts and steps for using ALAMODE to ca
  gnuplot> set ylabel "Phonon lifetime (ps)"
  gnuplot> plot "tau300K_10.dat" using 3:4 w p
 
- ### Cumulative thermal conductivity
+ #### Cumulative thermal conductivity
  1. Otro análisis para la conductividad termica acumulada:
  analyze_phonons.py --calc cumulative --temp 300 --length 10000:5 si222.result > cumulative_300K_10.dat
  2. Dibujamos:
@@ -79,7 +79,7 @@ In the ALAMODE directory there are the scripts and steps for using ALAMODE to ca
 
  * nota: algo ocurre con el programa reintenta varias veces el analyze_phonons (ten en cuenta el python+cpp)
 
- ### Thermal conductivity spectrum
+ #### Thermal conductivity spectrum
  1. Calculamosel espectro de conductividad térmica:
  anphon si_RTA.in > si_RTA2.log
  2. Extraemos los dator de temperatura 300k ya que el espectro incluye varias temperaturas.
