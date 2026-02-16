@@ -21,6 +21,10 @@
 #  MA 02110-1301, USA.
 #
 #
+"""
+Este script python utiliza ASE para convertir los datos del formato usado por
+VASP a el formato usado por LAMMPS.
+"""
 from ase.io import read, write
 from ase import Atoms
 import glob
