@@ -24,6 +24,11 @@
 # ---------------------------
 # Importación de los módulos
 # ---------------------------
+"""
+This script python creates the input files used by alm.
+The files created by this script still need to be checked and modified in order
+to be effectively used.
+"""
 import numpy as np
 import os
 
