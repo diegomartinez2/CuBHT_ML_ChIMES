@@ -21,6 +21,10 @@
 #  MA 02110-1301, USA.
 #
 #
+"""
+This script is not necessary for the ChIMES FF calculations, but may be usefull
+for other potentials.
+"""
 import numpy as np
 
 def convert_poscar_direct_to_cartesian(input_filepath: str, output_filepath: str):
