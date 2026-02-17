@@ -23,7 +23,7 @@
 #
 """
 Este script python utiliza ASE para convertir los datos del formato usado por
-VASP a el formato usado por LAMMPS.
+VASP al formato usado por LAMMPS.
 """
 from ase.io import read, write
 from ase import Atoms
