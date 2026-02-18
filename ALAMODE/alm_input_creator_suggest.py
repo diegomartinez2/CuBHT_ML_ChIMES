@@ -21,6 +21,11 @@
 #  MA 02110-1301, USA.
 #
 #
+"""
+This script creates the input files for alm calculations.
+It can create the suggest input file, but it still need some checks and
+modifications for getting a better output.
+"""
 import numpy as np
 import os
 
