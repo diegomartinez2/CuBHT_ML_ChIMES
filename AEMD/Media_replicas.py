@@ -24,6 +24,11 @@
 # ---------------------------
 # Importación de los módulos
 # ---------------------------
+"""
+Este script extrae las salidas de datos obtenidas con run_AEMD_study3.sh
+calcula la media de las repeticiones con los mismos DT y ST, y prepara
+para el ajuste (Ajuste.py)
+"""
 import os
 import pandas as pd
 import numpy as np
