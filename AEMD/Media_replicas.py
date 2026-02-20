@@ -72,6 +72,9 @@ def process_results():
             }).reset_index()
 
             # Guardar en la carpeta del caso (fuera de REP_X)
+            #if os.path.exists(output_name):
+                #print(f"Saltando: {output_name} ya existe.")
+                #continue
             output_name = os.path.join(case_path, "averaged_delta_T.dat")
             final_df.to_csv(output_name, sep='\t', index=False)
             print(f"Generado: {output_name}")
