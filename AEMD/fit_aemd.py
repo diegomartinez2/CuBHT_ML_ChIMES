@@ -58,17 +58,17 @@ def read_geom(fname: str = "geom.info") -> tuple[int, float, float]:
 
 
 def read_aemd_deltaT(fname: str = "aemd_deltaT.dat") -> tuple[np.ndarray, np.ndarray | None, np.ndarray, np.ndarray, np.ndarray]:
-    """
-    Supports two common formats:
-
-    (A) With time column (recommended):
-      step  time(ps)  Th  Tc  dT
-
-    (B) Without time column:
-      step  Th  Tc  dT
-
-    Returns: step, time_or_None, Th, Tc, dT
-    """
+#    """
+#    Supports two common formats:
+#
+#    (A) With time column (recommended):
+#      step  time(ps)  Th  Tc  dT
+#
+#    (B) Without time column:
+#      step  Th  Tc  dT
+#
+#    Returns: step, time_or_None, Th, Tc, dT
+#    """
     p = Path(fname)
     if not p.exists():
         raise FileNotFoundError(f"ΔT file not found: {fname}")
@@ -120,12 +120,12 @@ def fit_alpha(
     Lz_A: float,
     nterms: int = 20,
 ) -> tuple[float, float, float]:
-    """
-    Lightweight fit (no SciPy):
-    - grid search in log-space for alpha
-    - for each alpha, solve best dT0 by linear least squares
-    Returns: (alpha_A2_per_ps, dT0_fit, mse)
-    """
+#    """
+#    Lightweight fit (no SciPy):
+#    - grid search in log-space for alpha
+#    - for each alpha, solve best dT0 by linear least squares
+#    Returns: (alpha_A2_per_ps, dT0_fit, mse)
+#    """
     t_ps = np.asarray(t_ps, dtype=float)
     dT = np.asarray(dT, dtype=float)
 
