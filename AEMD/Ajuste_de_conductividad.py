@@ -34,7 +34,8 @@ def extraer_parametros_de_replica(case_id):
     Busca el log.lammps en la carpeta de la réplica 1 para obtener metadatos.
     """
     # El caso es algo como S444_DT5_TS0.5. Buscamos run_S444_DT5_TS0.5_R1
-    replica_path = f"run_{case_id}_R1/lammps.log"
+    #replica_path = f"run_{case_id}_R1/lammps.log"
+    replica_path = f"run_{case_id}_R1/log.lammps"
 
     data = {
         "volumen_m3": None,
