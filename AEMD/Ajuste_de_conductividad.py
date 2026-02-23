@@ -11,11 +11,15 @@ log.lammps originales dentro de las carpetas de las réplicas.
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 import re
 import os
 import glob
+# --- CRUCIAL: Configurar backend no interactivo ANTES de importar pyplot ---
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 # ==========================================
 # 1. CONFIGURACIÓN Y CONSTANTES
@@ -150,6 +154,7 @@ def run_analysis():
             plt.ylabel('Delta T')
             plt.legend()
             plt.savefig(f"plot_{case_id}.png")
+            plt.close() # Limpiar memoria de la figura
             plt.close()
 
         except Exception as e:
