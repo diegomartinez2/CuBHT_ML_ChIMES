@@ -142,6 +142,12 @@ thermo_style custom step temp c_tc c_th v_delta_T
 thermo 10000
 
 # 7.4. Ejecutar la simulación AEMD
+#--- Extracción de geometría para fit_aemd.py
+#---1. Definir variables para los parámetros requeridos
+variable n_atoms equal count(all)variable vol_A3  equal volvariable lz_A    equal lz2.
+#Imprimir los valores al archivo geom.infoSe usa 'screen no' para que no ensucie la consola y 'append' o 'file' para crear el archivo.
+print "# Natoms Volume_A3 Lz_A" file geom.infoprint "${n_atoms} ${vol_A3} ${lz_A}" append geom.info
+
 # Debe ser un run largo para capturar el decaimiento completo
 run 200000
 
