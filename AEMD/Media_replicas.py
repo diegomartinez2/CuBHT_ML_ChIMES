@@ -50,10 +50,12 @@ def process_results():
             continue
 
         for rep_dir in replica_dirs:
+            # Normalmente es "delta_T_AEMD.dat", pero en nuestro caso es "delta_T_S{}_DT{}_TS{}_R{}.dat"
             file_path = os.path.join(rep_dir, "delta_T_AEMD.dat")
             if os.path.exists(file_path):
                 # LAMMPS ave/time tiene 2 líneas de comentario iniciales
                 # El formato suele ser: TimeStep Number-of-bins v_delta_T
+                # pero en este caso es de TimeStep v_delta_T
                 try:
                     #df = pd.read_csv(file_path, sep='\s+', skiprows=2, names=['Step', 'Count', 'DeltaT'])
                     df = pd.read_csv(file_path, sep='\s+', skiprows=2, names=['Step', 'DeltaT'])
