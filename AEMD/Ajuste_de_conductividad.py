@@ -90,7 +90,7 @@ def f_total(x, k2, L, T_max, T_min):
         term_c = (-2 * b_n + 2 * b_n * np.cos(k1_n)) * (1.0 / k1_n)
         total += np.exp(-k2 * x * (k_n**2)) * term_c
     return total
-def f_total(x, k, A, T_offset):
+def f_total2(x, k, A, T_offset):
     """
     Función de ajuste mejorada.
     He añadido T_offset para que el algoritmo pueda ajustar el nivel base
