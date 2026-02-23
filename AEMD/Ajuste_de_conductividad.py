@@ -155,7 +155,7 @@ def run_analysis():
             plt.legend()
             plt.savefig(f"plot_{case_id}.png")
             plt.close() # Limpiar memoria de la figura
-            plt.close()
+            print(f"  [+] Gráfica guardada como: plot_{case_id}.png")#plt.close()
 
         except Exception as e:
             print(f"  [!] Falló el ajuste para {case_id}: {e}")
