@@ -78,4 +78,25 @@ def procesar_archivo(ruta):
 
 # Lista de archivos para demostracion (suponiendo archivos .log en carpeta)
 print("Procesando archivos y calculando constantes materiales...")
-# ... (logica de ejecucion similar al anterior)
+def main():
+    # Lista de archivos .log en la carpeta actual
+    archivos = [f for f in os.listdir('.') if f.endswith('.log')]
+    resultados = []
+
+    for archivo in archivos:
+        res = procesar_archivo(archivo)
+        if res:
+            resultados.append(res)
+
+    # Mostrar resultados
+    if resultados:
+        df = pd.DataFrame(resultados)
+        print("\n" + "="*60)
+        print(f"{'CASO':<25} | {'K2_FIT':<12} | {'CONDUCTIVIDAD':<12}")
+        print("-" * 60)
+        for _, row in df.iterrows():
+            print(f"{row['CASO']:<25} | {row['K2_FIT']:<12.6e} | {row['CONDUCTIVIDAD']:<12.6f}")
+        print("="*60)
+
+if __name__ == "__main__":
+    main()
