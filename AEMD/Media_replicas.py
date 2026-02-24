@@ -20,15 +20,16 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
-#
-# ---------------------------
-# Importación de los módulos
-# ---------------------------
+
 """
 Este script extrae las salidas de datos obtenidas con run_AEMD_study3.sh
 calcula la media de las repeticiones con los mismos DT y ST, y prepara
 para el ajuste (Ajuste.py)
 """
+#
+# ---------------------------
+# Importación de los módulos
+# ---------------------------
 import os
 import pandas as pd
 import numpy as np
