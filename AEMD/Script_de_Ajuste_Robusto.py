@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Media_replicas.py
+#  Script_de_Ajuste_Robusto.py
 #
 #  Copyright 2026 Diego Martinez Gutierrez <diego.martinez@ehu.eus>
 #
