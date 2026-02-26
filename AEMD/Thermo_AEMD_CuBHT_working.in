@@ -146,7 +146,8 @@ thermo 10000
 #---1. Definir variables para los parámetros requeridos
 variable n_atoms equal count(all)variable vol_A3  equal volvariable lz_A    equal lz2.
 #Imprimir los valores al archivo geom.infoSe usa 'screen no' para que no ensucie la consola y 'append' o 'file' para crear el archivo.
-print "# Natoms Volume_A3 Lz_A" file geom.infoprint "${n_atoms} ${vol_A3} ${lz_A}" append geom.info
+print "# Natoms Volume_A3 Lz_A" file geom.info
+print "${n_atoms} ${vol_A3} ${lz_A}" append geom.info
 
 # Debe ser un run largo para capturar el decaimiento completo
 run 200000
