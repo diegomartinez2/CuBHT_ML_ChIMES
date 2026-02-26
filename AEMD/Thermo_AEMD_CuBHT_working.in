@@ -98,13 +98,12 @@ reset_timestep 0
 # -------------------------------------------------------------------
 print "--- FASE II: CREACION DEL PULSO DE CALOR (T0) ---"
 
-# 6.1. Definición de las dos mitades (Hot/Cold)
+# 6.1. Definición de las dos mitades (Hot/Cold) [Esto ya no es necesario ya que se ha hecho al principio del script definiendo la división de forma automatica]
 # variable lx_aemd equal ((xhi-xlo)/2.0)
 # Mitad izquierda (Cold)
 # region left_half block EDGE ${lx_aemd} EDGE EDGE EDGE EDGE units box
 # Mitad derecha (Hot)
 # region right_half block ${lx_aemd} EDGE EDGE EDGE EDGE EDGE units box
-
 # group cold region left_half
 # group hot region right_half
 
@@ -136,7 +135,7 @@ variable delta_T equal c_th-c_tc # La magnitud que decae exponencialmente
 
 # 7.3. Salida de datos para el post-procesamiento
 # Guardar la diferencia de temperatura cada 1000 pasos (para un mejor análisis)
-#fix output all ave/time 1 1000 1000 v_delta_T file delta_T_AEMD.dat  
+#fix output all ave/time 1 1000 1000 v_delta_T file delta_T_AEMD.dat
 fix output all ave/time 1 1000 1000 v_time_ps c_th c_tc v_delta_T file delta_T_AEMD.dat
 # Salida termodinámica para monitoreo
 thermo_style custom step temp c_tc c_th v_delta_T
