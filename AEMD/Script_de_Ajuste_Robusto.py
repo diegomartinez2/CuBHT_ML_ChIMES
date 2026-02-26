@@ -22,7 +22,7 @@
 #
 """
 Este script es un ejemplo de ajuste con caida exponencial.
-Sin eembargo este método pierde en 'fisicalidad'
+Sin embargo este método pierde en 'fisicalidad'
 """
 import os
 import numpy as np
