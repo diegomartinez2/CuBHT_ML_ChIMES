@@ -119,14 +119,7 @@ def read_media_aemd_deltaT(fname: str = "media_aemd_deltaT.dat") -> tuple[np.nda
         data = data[None, :]
 
     ncol = data.shape[1]
-    if ncol == 4:
-        step = data[:, 0]
-        time_ps = data[:, 1]
-        dT = data[:, 2]
-        Std_DeltaT = data[:, 3]
-
-        return step, time_ps, Th, Tc, dT, Std_DeltaT
-    elif ncol == 6:
+    if ncol == 6:
         step = data[:, 0]
         time_ps = data[:, 1]
         Th = data[:, 2]
@@ -142,13 +135,20 @@ def read_media_aemd_deltaT(fname: str = "media_aemd_deltaT.dat") -> tuple[np.nda
         dT = data[:, 3]
         Std_DeltaT = data[:, 4]
         return step, None, Th, Tc, dT, Std_DeltaT
-    elif ncol >= 4:
+    elif ncol == 4:
+        step = data[:, 0]
+        time_ps = data[:, 1]
+        dT = data[:, 2]
+        Std_DeltaT = data[:, 3]
+
+        return step, time_ps, Th, Tc, dT, Std_DeltaT
+    elif ncol == 3:
         step = data[:, 0]
         dT = data[:, 1]
         Std_DeltaT = data[:, 2]
-        return step, None, None, None, dT, Std_DeltaT    
+        return step, None, None, None, dT, Std_DeltaT
     else:
-        raise RuntimeError(f"Expected 4, 5 or 6 columns in {fname}, got shape {data.shape}")
+        raise RuntimeError(f"Expected 3, 4, 5 or 6 columns in {fname}, got shape {data.shape}")
 
 
 def model_deltaT(

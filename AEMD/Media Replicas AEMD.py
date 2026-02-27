@@ -75,6 +75,8 @@ def process_results():
 
             final_df = pd.DataFrame({
                 'Step': mean_series.index,
+                'Mean_Th': mean_Th.values,
+                'Mean_Tc': mean_Tc.values,
                 'Mean_DeltaT': mean_series.values,
                 'Std_DeltaT': std_series.values,
                 'N_Replicas': combined.count(axis=1).values
@@ -84,7 +86,7 @@ def process_results():
             final_df['Time_ps'] = final_df['Step'].map(time_mapping)
 
             # Reordenar columnas para que sea fácil de leer
-            final_df = final_df[['Step', 'Time_ps', 'Mean_DeltaT', 'Std_DeltaT', 'N_Replicas']]
+            final_df = final_df[['Step', 'Time_ps',  'Mean_Th', 'Mean_Tc', 'Mean_DeltaT', 'Std_DeltaT', 'N_Replicas']]
 
             # 5. Guardar el resultado
             output_name = f"averaged_{case_id.replace('run_', '')}.dat"
