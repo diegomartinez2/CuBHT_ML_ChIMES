@@ -96,6 +96,60 @@ def read_aemd_deltaT(fname: str = "aemd_deltaT.dat") -> tuple[np.ndarray, np.nda
     else:
         raise RuntimeError(f"Expected 4 or 5 columns in {fname}, got shape {data.shape}")
 
+def read_media_aemd_deltaT(fname: str = "media_aemd_deltaT.dat") -> tuple[np.ndarray, np.ndarray | None, np.ndarray, np.ndarray, np.ndarray]:
+#    """
+#    Supports two common formats:
+#
+#    (A) With time column (recommended):
+#      step  time(ps)  Th  Tc  dT
+#
+#    (B) Without time column:
+#      step  media_dT Std_DeltaT
+#
+#    Returns: step, time_or_None, Th, Tc, dT
+#    """
+    p = Path(fname)
+    if not p.exists():
+        raise FileNotFoundError(f"ΔT file not found: {fname}")
+
+    data = np.genfromtxt(fname, comments="#")
+    if data.size == 0:
+        raise RuntimeError(f"No data read from {fname}")
+    if data.ndim == 1:
+        data = data[None, :]
+
+    ncol = data.shape[1]
+    if ncol == 4:
+        step = data[:, 0]
+        time_ps = data[:, 1]
+        dT = data[:, 2]
+        Std_DeltaT = data[:, 3]
+
+        return step, time_ps, Th, Tc, dT, Std_DeltaT
+    elif ncol == 6:
+        step = data[:, 0]
+        time_ps = data[:, 1]
+        Th = data[:, 2]
+        Tc = data[:, 3]
+        dT = data[:, 4]
+        Std_DeltaT = data[:, 5]
+
+        return step, time_ps, dT, Std_DeltaT
+    elif ncol == 5:
+        step = data[:, 0]
+        Th = data[:, 1]
+        Tc = data[:, 2]
+        dT = data[:, 3]
+        Std_DeltaT = data[:, 4]
+        return step, None, Th, Tc, dT, Std_DeltaT
+    elif ncol >= 4:
+        step = data[:, 0]
+        dT = data[:, 1]
+        Std_DeltaT = data[:, 2]
+        return step, None, None, None, dT, Std_DeltaT    
+    else:
+        raise RuntimeError(f"Expected 4, 5 or 6 columns in {fname}, got shape {data.shape}")
+
 
 def model_deltaT(
     t_ps: np.ndarray,
@@ -237,6 +291,7 @@ def main() -> None:
     )
     ap.add_argument("--geom", default="geom.info", help="Geometry file written by LAMMPS (geom.info).")
     ap.add_argument("--data", default="aemd_deltaT.dat", help="ΔT file (columns: step [time] Th Tc dT).")
+    ap.add_argument("--media", default="media_aemd_deltaT.dat", help="Media of ΔT file (columns: step [time] media_dT Std_DeltaT).")
     ap.add_argument("--dt_fs", type=float, default=1.0, help="LAMMPS timestep in fs (used only if file has no time column).")
     ap.add_argument("--nterms", type=int, default=20, help="Number of terms in the series (e.g., 10, 20, 40, 80).")
     ap.add_argument("--tmin_ps", type=float, default=0.0, help="Ignore data earlier than this time (ps).")
