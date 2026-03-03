@@ -21,7 +21,9 @@
 #  MA 02110-1301, USA.
 #
 """
-Media_replicas.py
+Este script extrae las salidas de datos obtenidas con run_AEMD_study3.sh
+calcula la media de las repeticiones con los mismos DT y ST, y prepara
+para el ajuste (fit_aemd.py)
 Modificado para el nuevo formato de salida de LAMMPS:
 Fix: Step, N_count, Time_ps, Th, Tc, DeltaT
 """
