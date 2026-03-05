@@ -80,7 +80,7 @@ unfix           BOX
 # minimize        1.0e-10  1.0e-10  20000  20000
 # unfix           BOX
 
-# 5. FASE I: EQUILIBRIO NVT (PREPARACIÓN) 🌡️
+# 5. FASE I: EQUILIBRIO NVT (PREPARACIÓN)
 # -------------------------------------------------------------------
 print "--- FASE I: EQUILIBRIO NVT (TODO EL SISTEMA) ---"
 
