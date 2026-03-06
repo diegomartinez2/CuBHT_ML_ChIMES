@@ -2,11 +2,12 @@
 Study of CuBHT with Machine Learning potentials
 
 ## Study CuBHT termal transport using chimesFF and AEMD
-In the DATA_ChIMES_parameters there are the parametrizations for CuBHT chimesFF. 
+In the DATA_ChIMES_parameters there are the parametrizations for CuBHT chimesFF.
 
 In the CuBHT directory there are the lammps datafiles of the structure configuratios
 
 In the AEMD directory there are scripts for running the AEMD calculations.
+  * It includes a directory with the old scripts.
 
 In the ALAMODE directory there are the scripts and steps for using ALAMODE to calculate CuBHT properties.
 
