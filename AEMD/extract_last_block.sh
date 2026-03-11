@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # =============================================================================
 # Script:        extract_last_block.sh
-# Autor:         Diego Martínez Gutiérrez <CORREO@EJEMPLO.COM>
+# Autor:         Diego Martínez Gutiérrez
 # Descripción:   Este script extrae el último bloque de datos delimitado por marcadores.
 # Licencia:      GNU General Public License v3.0
 # Repositorio:   https://github.com/diegomartinez2/CuBHT_ML_ChIMES
