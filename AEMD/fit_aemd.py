@@ -306,7 +306,7 @@ def main() -> None:
 
     N, V_A3, Lz_A = read_geom(args.geom)
     #step, time_ps, Th, Tc, dT = read_aemd_deltaT(args.data)
-    step, time_ps, Th, Tc, dT = read_media_aemd_deltaT(args.data)
+    step, time_ps, Th, Tc, dT = read_media_aemd_deltaT(args.media)
     # build time axis
     if time_ps is None:
         dt_ps = args.dt_fs * 1.0e-3
