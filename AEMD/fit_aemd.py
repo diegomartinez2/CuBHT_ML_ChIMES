@@ -127,7 +127,7 @@ def read_media_aemd_deltaT(fname: str = "media_aemd_deltaT.dat") -> tuple[np.nda
         dT = data[:, 4]
         Std_DeltaT = data[:, 5]
 
-        return step, time_ps, dT, Std_DeltaT
+        return step, time_ps,None, None, dT, Std_DeltaT
     elif ncol == 5:
         step = data[:, 0]
         Th = data[:, 1]
