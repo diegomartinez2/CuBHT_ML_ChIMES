@@ -1,0 +1,176 @@
+#####################################################################
+# LAMMPS Input Script - Approach-to-Equilibrium MD (AEMD)
+# Cálculo de conductividad térmica por relajación del pulso de calor
+#####################################################################
+
+# 1. DEFINICIONES INICIALES
+# -------------------------------------------------------------------
+units real           # Angstroms, femtosegundos, Kelvin, kcal/mol
+atom_style atomic
+boundary p p p       # **CRÍTICO para AEMD:** Periódica en todas las direcciones.
+newton on
+atom_modify sort 0 0.0
+
+# 2. LECTURA Y RÉPLICA DE DATOS
+# -------------------------------------------------------------------
+read_data AA-supercell-optimized.lmp
+#replicate 35 2 2     # Réplica del sistema (Largo en X, 2x2 en YZ)
+#replicate 35 4 4
+replicate 4 2 2 # Mirar si esto es suficiente -> 422, 822, 442, 424, 444,
+
+# 3. POTENCIAL DE INTERACCIÓN
+# -------------------------------------------------------------------
+# El 1.1 es un cutoff global para el LJ si no se especifica otro
+pair_style hybrid/overlay chimesFF lj/cut 1.1
+
+# 2. Coeficientes para ChIMES (tu potencial real)
+# Nota que ahora hay que especificar "chimesFF" después de los asteriscos
+pair_coeff * * chimesFF params.txt
+
+# 3. Coeficientes para el "Muro de Seguridad" (Lennard-Jones)
+# Usando tus valores refinados: epsilon=10.0, sigma=0.98, cutoff=1.01
+pair_coeff * * lj/cut 10.0 0.98 1.01
+
+# 4. PARÁMETROS DE SIMULACIÓN Y TERMODINÁMICA
+# -------------------------------------------------------------------
+variable dt equal 0.5   #0.5 o 1.0 o 1.5 fs para probar...
+#variable dt equal 1.0e-4 #funciona pero no llega al final.. *.old
+timestep ${dt}
+
+variable T_eq equal 300.0 # Temperatura de equilibrio (Ej: (310K + 290K) / 2)
+thermo 1000
+thermo_style custom step temp press etotal ke pe enthalpy
+
+# Busca el lugar donde dividir el sistema por la mitad (mitad de átomos a un lado y mitad al otro)
+variable Ntot  equal count(all)
+variable Nhalf equal floor(v_Ntot/2)
+
+variable lo equal xlo
+variable hi equal xhi
+
+variable it loop 40
+label bisect
+
+  variable xcut equal 0.5*(v_lo+v_hi)
+
+  region  RTMP block INF ${xcut} INF INF INF INF units box
+  group   GLEFT region RTMP
+  variable nleft equal count(GLEFT)
+
+  if "${nleft} > ${Nhalf}" then "variable hi equal ${xcut}" else "variable lo equal ${xcut}"
+
+  group   GLEFT delete
+  region  RTMP delete
+
+next it
+jump SELF bisect
+
+variable xcut_final equal 0.5*(v_lo+v_hi)
+variable eps equal 1.0e-8
+variable x1  equal "v_xcut_final - v_eps"
+variable x2  equal "v_xcut_final + v_eps"
+
+print "AEMD: xcut=${xcut_final} (target left=${Nhalf} of total ${Ntot})"
+
+region  R_HOT  block INF ${x1} INF INF INF INF units box
+region  R_COLD block ${x2} INF INF INF INF INF units box
+group   HOT  region R_HOT
+group   COLD region R_COLD
+
+# 4.5 FASE 0: Minimizacion de la estructura
+# -------------------------------------------------------------------
+# CuBHT AA
+fix             BOX all box/relax tri 0.0 vmax 0.001
+minimize        1.0e-10  1.0e-10  20000  20000
+unfix           BOX
+# CuBHT C
+# fix             BOX all box/relax iso 0.0 vmax 0.001
+# minimize        1.0e-10  1.0e-10  20000  20000
+# unfix           BOX
+
+# 5. FASE I: EQUILIBRIO NVT (PREPARACIÓN)
+# -------------------------------------------------------------------
+print "--- FASE I: EQUILIBRIO NVT (TODO EL SISTEMA) ---"
+
+# 5.1. Inicializar velocidades
+velocity all create ${T_eq} 42 dist gaussian
+
+# 5.2. Equilibrar todo el sistema a la temperatura media
+fix NVT_eq all nvt temp ${T_eq} ${T_eq} 50   #aprox. 100 veces el valor de dt
+run 500000 # Un run largo para estabilizar la energía y la presión
+
+unfix NVT_eq
+reset_timestep 0
+
+# 6. FASE II: CREACIÓN DEL PULSO DE CALOR (KICK)
+# -------------------------------------------------------------------
+print "--- FASE II: CREACION DEL PULSO DE CALOR (T0) ---"
+
+# 6.1. Definición de las dos mitades (Hot/Cold) [Esto ya no es necesario ya que se ha hecho al principio del script definiendo la división de forma automatica]
+# variable lx_aemd equal ((xhi-xlo)/2.0)
+# Mitad izquierda (Cold)
+# region left_half block EDGE ${lx_aemd} EDGE EDGE EDGE EDGE units box
+# Mitad derecha (Hot)
+# region right_half block ${lx_aemd} EDGE EDGE EDGE EDGE EDGE units box
+# group cold region left_half
+# group hot region right_half
+
+# 6.2. Asignar las temperaturas del pulso de calor (Tf ± Delta_T)
+variable T_hot_pulse equal 310.0
+variable T_cold_pulse equal 290.0
+
+# **IMPORTANTE:** Reemplazar las velocidades con el pulso
+velocity hot create ${T_hot_pulse} 123 dist gaussian
+velocity cold create ${T_cold_pulse} 456 dist gaussian
+
+# Ejecutar 1 paso para aplicar el cambio y luego resetear.
+run 1
+reset_timestep 0
+
+# 7. FASE III: RELAJACIÓN Y MEDICIÓN (NVE)
+# -------------------------------------------------------------------
+print "--- FASE III: RELAJACION NVE Y MEDICION ---"
+
+# 7.1. Integración NVE (conservación de energía)
+# El calor fluye libremente hasta el equilibrio
+fix NVE_relax all nve
+
+# 7.2. Cálculo de la diferencia de temperatura a lo largo del tiempo
+compute tc cold temp
+compute th hot temp
+variable time_ps equal step*dt
+variable delta_T equal c_th-c_tc # La magnitud que decae exponencialmente
+
+# 7.3. Salida de datos para el post-procesamiento
+# Guardar la diferencia de temperatura cada 1000 pasos (para un mejor análisis)
+#fix output all ave/time 1 1000 1000 v_delta_T file delta_T_AEMD.dat
+fix output all ave/time 1 1000 1000 v_time_ps c_th c_tc v_delta_T file delta_T_AEMD.dat
+# Salida termodinámica para monitoreo
+thermo_style custom step temp c_tc c_th v_delta_T
+thermo 10000
+
+# 7.4. Ejecutar la simulación AEMD
+
+# --- Extracción de geometría para fit_aemd.py ---
+
+# 1. Definir variables para los parámetros requeridos
+variable n_atoms equal count(all)
+variable vol_A3  equal vol
+variable lz_A    equal lz
+
+# 2. Ejemplo de impresión para verificar (opcional)
+print "Número de átomos: ${n_atoms}"
+print "Volumen (A^3): ${vol_A3}"
+print "Largo en Z (A): ${lz_A}"
+#Imprimir los valores al archivo geom.infoSe usa 'screen no' para que no ensucie la consola y 'append' o 'file' para crear el archivo.
+print "# Natoms Volume_A3 Lz_A" file geom.info
+print "${n_atoms} ${vol_A3} ${lz_A}" append geom.info
+
+# Debe ser un run largo para capturar el decaimiento completo
+run 200000
+
+unfix NVE_relax
+unfix output
+
+print "--- AEMD TERMINADA. ANALICE delta_T_AEMD.dat ---"
+# END
