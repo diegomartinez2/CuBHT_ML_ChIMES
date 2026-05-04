@@ -4,3 +4,5 @@
 4. The final fitting and the calculation of the thermal properties is done with the 'fit_aemd.py'
 
 Notes: The chimesFF sometimes gets the atoms too close, decrease timesteps to avoid that.
+
+Note: The ML potential was created from the AA system, it may work for the C system but doesn't looks like it will work.
