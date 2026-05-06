@@ -6,3 +6,4 @@
 Notes: The chimesFF sometimes gets the atoms too close, decrease timesteps to avoid that.
 
 Note: The ML potential was created from the AA system, it may work for the C system but doesn't looks like it will work.
+The use of a compound potential doesn't work.
