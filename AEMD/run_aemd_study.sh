@@ -18,7 +18,7 @@ TIMESTEPS=(0.5 1.0 1.5)
 
 # Número de réplicas por cada configuración (cambia las semillas aleatorias)
 REPLICAS=3
-
+REPLICAS_FROM=1 #in case you want to continue the calculation from a different point.
 # Archivo de entrada base y ejecutables
 INPUT_BASE="Thermo_AEMD_CuBHT_working.in"
 LAMMPS_EXEC="mpirun -np 4 lmp_mpi" # O lmp_serial, etc.
@@ -46,7 +46,7 @@ for SIZE in "${SIZES[@]}"; do
 
         for STEP in "${TIMESTEPS[@]}"; do
 
-            for ((R=1; R<=REPLICAS; R++)); do
+            for ((R=REPLICAS_FROM; R<=REPLICAS; R++)); do
 
                 # Crear identificador único y carpeta de trabajo
                 WORK_DIR="run_S${SIZE_NAME}_DT${DT_VAL}_TS${STEP}_R${R}"
